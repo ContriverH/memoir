@@ -1,5 +1,4 @@
 import mongoose, { models,Schema } from "mongoose";
-// const Schema = mongoose.Schema; 
 
 interface Blog {
     title: string; 
