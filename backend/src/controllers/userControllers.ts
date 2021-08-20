@@ -1,7 +1,8 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response, NextFunction, response } from "express";
 
 const argon2 = require("argon2"); 
 const jwt = require("jsonwebtoken");
+const session = require('express-session'); 
 const userModel = require("../models/user");
 const {userRegistrationValidation} = require("../configuration/userValidation");
 /*
@@ -18,6 +19,7 @@ date of joining
 country where user belongs to
 role
 */
+
 exports.userRegistration = async (req: Request,res: Response,next: NextFunction)=>{
 
     const {error} = userRegistrationValidation(req.body);
@@ -36,6 +38,7 @@ exports.userRegistration = async (req: Request,res: Response,next: NextFunction)
         countryOfUser : req.body.countryOfUser,
         date : Date.now()
     });
+
     await user.save();
 /*
 status = Passed
@@ -53,6 +56,17 @@ username
 @port 8000
 @route POST /video/user/login
 */
+
+// exports.logout = async(req: Request, res:Response)=>{
+//     req.session.destroy( (err) =>{
+//          if(err) {
+//              return console.log(err); 
+//          }
+//          res.redirect("/"); 
+//     })
+// }
+
+
 exports.userLogin = async (req: Request,res: Response,next: NextFunction)=>{
     const userFound  = await userModel.findOne({username : req.body.username});
     /*
@@ -75,11 +89,15 @@ exports.userLogin = async (req: Request,res: Response,next: NextFunction)=>{
          }
       */
    const validatePassword = await argon2.verify(userFound.password, req.body.password);
-   if(!validatePassword) return res.status(400).json({
+   if(!validatePassword){ 
+
+
+    return res.status(400).json({
        status : "Failed",
        message : "Incorrect Password",
        successfulLogin : false
    });
+}
    const token = await jwt.sign({
        // userID : userFound._id ,
        sub : userFound.username ,
