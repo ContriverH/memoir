@@ -33,6 +33,14 @@ const schema = new mongoose.Schema({
         type : Date ,
         default : Date.now
     },
+    blogs: {
+        type : String,   // we will store blog ids 
+        required: false, 
+    }, 
+    comments : {
+        type : String,   // we will store comment IDs 
+        required: false,  
+    }, 
     role : {
         type : String ,
         default : "user"

@@ -9,6 +9,15 @@ interface Blog {
 }
 
 
+const commentSchema = new Schema({
+    userID: String, 
+    comment: String, 
+    blogId: String, 
+    username:String, 
+}, 
+{timestamps: true}, 
+); 
+
 const blogSchema = new Schema<Blog>({
     title: {
         type: String,
@@ -22,6 +31,11 @@ const blogSchema = new Schema<Blog>({
         type: String, 
         required : false, 
     }, 
+    images: 
+         [{
+             type: String, 
+             required: false, 
+         }], 
     like: {
         type: Number, 
         required: false, 
@@ -32,17 +46,13 @@ const blogSchema = new Schema<Blog>({
     },
     comments:[
         {
-            type: new Schema({
-            userID: String, 
-            comment: String, 
-            username:String, 
-        }, 
-        {timestamps: true}, 
-        )
-        , required: false
+        type: commentSchema, 
+        required: false, 
     }
     ]
 }  , {timestamps: true }); 
 
 export const Blog = mongoose.model<Blog>('Blog', blogSchema); 
 module.exports = Blog; 
+
+
