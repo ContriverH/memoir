@@ -1,6 +1,7 @@
 const {userRegistration , userLogin} = require("../controllers/userControllers");
 const verifyToken = require("../routers/verifyToken");
-const {createBlog, listall, searchByTitle} = require("../controllers/blogControllers")
+const {createBlog, listall, searchByTitle, updateBlog, test
+} = require("../controllers/blogControllers")
 const Express = require("express");
 
 const router = Express.Router();
@@ -13,5 +14,6 @@ router.route("/user/login")
 router.route("/blogs/create").post(createBlog); 
 router.route("/blogs/listall").get(listall); 
 router.route("/blogs/search").post(searchByTitle); 
-
+router.route('/updateblog/:id').post(updateBlog); 
+router.route('/test/:id').get(test); 
 module.exports = router;
