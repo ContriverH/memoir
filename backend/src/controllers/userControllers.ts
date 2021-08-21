@@ -1,25 +1,8 @@
-import { Request, Response, NextFunction, response } from "express";
-
-const argon2 = require("argon2"); 
+const argon2 = require("argon2");
 const jwt = require("jsonwebtoken");
-const session = require('express-session'); 
 const userModel = require("../models/user");
 const {userRegistrationValidation} = require("../configuration/userValidation");
-/*
-@desc For User Registration
-@port 8000
-@route POST /video/user/registration
-@model
-username*
-password
-first name
-last name
-email*
-date of joining
-country where user belongs to
-role
-*/
-
+import {Response, Request, NextFunction} from "express"
 exports.userRegistration = async (req: Request,res: Response,next: NextFunction)=>{
 
     const {error} = userRegistrationValidation(req.body);
@@ -27,7 +10,7 @@ exports.userRegistration = async (req: Request,res: Response,next: NextFunction)
 
     const username = req.body.username;
 
-    // const salt = await bcrypt.genSalt(10);
+    // const salt = await argon2.genSalt(10);
     const hashedPassword = await argon2.hash(req.body.password);
     const user = new userModel({
         username : username ,
@@ -35,16 +18,10 @@ exports.userRegistration = async (req: Request,res: Response,next: NextFunction)
         email : req.body.email ,
         firstName : req.body.firstName,
         lastName : req.body.lastName ,
-        countryOfUser : req.body.countryOfUser,
         date : Date.now()
     });
-
     await user.save();
-/*
-status = Passed
-Message = User Registered
-username
-*/
+    
     return res.status(201).json({
         status : "Passed",
         Message : "User Registered",
@@ -56,17 +33,6 @@ username
 @port 8000
 @route POST /video/user/login
 */
-
-// exports.logout = async(req: Request, res:Response)=>{
-//     req.session.destroy( (err) =>{
-//          if(err) {
-//              return console.log(err); 
-//          }
-//          res.redirect("/"); 
-//     })
-// }
-
-
 exports.userLogin = async (req: Request,res: Response,next: NextFunction)=>{
     const userFound  = await userModel.findOne({username : req.body.username});
     /*
@@ -88,16 +54,12 @@ exports.userLogin = async (req: Request,res: Response,next: NextFunction)=>{
          successfulLogin : false
          }
       */
-   const validatePassword = await argon2.verify(userFound.password, req.body.password);
-   if(!validatePassword){ 
-
-
-    return res.status(400).json({
+   const validatePassword = await argon2.verify( userFound.password, req.body.password);
+   if(!validatePassword) return res.status(400).json({
        status : "Failed",
        message : "Incorrect Password",
        successfulLogin : false
    });
-}
    const token = await jwt.sign({
        // userID : userFound._id ,
        sub : userFound.username ,

@@ -1,6 +1,6 @@
 const {userRegistration , userLogin} = require("../controllers/userControllers");
 const verifyToken = require("../routers/verifyToken");
-const {createBlog, listall, searchByTitle, updateBlog, test
+const {createBlog, listall, searchByTitle, updateBlog
 } = require("../controllers/blogControllers")
 const Express = require("express");
 
@@ -15,5 +15,4 @@ router.route("/blogs/create").post(createBlog);
 router.route("/blogs/listall").get(listall); 
 router.route("/blogs/search").post(searchByTitle); 
 router.route('/updateblog/:id').post(updateBlog); 
-router.route('/test/:id').get(test); 
 module.exports = router;

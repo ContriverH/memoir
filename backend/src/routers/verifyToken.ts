@@ -3,7 +3,7 @@ import { NextFunction,Request,Response } from "express";
 const jwt = require("jsonwebtoken");
 const userModel = require("../models/user");
 
-const verifyToken = async (req:Request,res:Response,next:NextFunction)=>{
+async function  verifyToken  (req:Request,res:Response,next:NextFunction) {
     const requestTokenHeader = req.header("Authorization");
     //Checking For Availability of Token
     if(!requestTokenHeader) return res.status(401).json({message : "Not Authorization Token Found"});
@@ -13,7 +13,11 @@ const verifyToken = async (req:Request,res:Response,next:NextFunction)=>{
         //Extracting Actual Token
         const token = requestTokenHeader.substring(7);
         //verifying Details
-        const jwtDetails = await jwt.verify(token , Buffer.from("secretkey", 'base64'));
+        const jwtDetails = jwt.verify(token ,"secret", (err:String, username: Map<String,String>)=>{
+            if(err) return res.status(403).json({ status: "403", message: "un-authorized"});
+            // req.body.user = username
+            // next(); 
+        });
         await userModel.findOne({
             username : jwtDetails.sub
         });

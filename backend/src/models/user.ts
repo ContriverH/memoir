@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+
 const schema = new mongoose.Schema({
     username : {
         type : String ,
@@ -23,12 +24,12 @@ const schema = new mongoose.Schema({
     },
     lastName : {
         type : String ,
-        required : true
+        required : false
     },
-    countryOfUser : {
-        type : String ,
-        required : true
-    },
+    // countryOfUser : {
+    //     type : String ,
+    //     required : false
+    // },
     dateOfUserJoining : {
         type : Date ,
         default : Date.now
