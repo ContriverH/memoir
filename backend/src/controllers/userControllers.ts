@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const userModel = require("../models/user");
 const {userRegistrationValidation} = require("../configuration/userValidation");
 import {Response, Request, NextFunction} from "express"
-exports.userRegistration = async (req: Request,res: Response,next: NextFunction)=>{
+exports.userRegistration = async (req: Request,res: Response)=>{
 
     const {error} = userRegistrationValidation(req.body);
     if(error) return res.status(400).json({message : error.details[0].message});
@@ -29,7 +29,7 @@ exports.userRegistration = async (req: Request,res: Response,next: NextFunction)
     })
 }
 
-exports.userLogin = async (req: Request,res: Response,next: NextFunction)=>{
+exports.userLogin = async (req: Request,res: Response)=>{
     const userFound  = await userModel.findOne({username : req.body.username});
 
    if(!userFound) return res.status(400).json({
