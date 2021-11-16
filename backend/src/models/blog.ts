@@ -8,7 +8,6 @@ interface Blog {
     body: string; 
 }
 
-
 const commentSchema = new Schema({
     userID: String, 
     comment: String, 
