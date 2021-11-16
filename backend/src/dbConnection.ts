@@ -1,8 +1,10 @@
 import mongoose from "mongoose"
-
+require('dotenv').config(); 
 
 const dbConnection = async function(){
-const uri = "mongodb+srv://nishi:@cluster0.zjfve.mongodb.net/golang?retryWrites=true&w=majority";
+
+    const  uri = process.env["MONGO_URL"] as string; 
+    console.log(uri)
 mongoose.connect(
     uri,
     {   useNewUrlParser:true,

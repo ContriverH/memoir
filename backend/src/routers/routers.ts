@@ -5,12 +5,10 @@ const {createBlog, listall, searchByTitle, updateBlog
 const Express = require("express");
 
 const router = Express.Router();
-//User Registration and Login
-router.route("/user/registration")
+router.route("/user/signup")
     .post(userRegistration);
 router.route("/user/login")
     .post(userLogin);
-
 router.route("/blogs/create").post(createBlog); 
 router.route("/blogs/listall").get(listall); 
 router.route("/blogs/search").post(searchByTitle); 
