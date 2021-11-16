@@ -4,7 +4,6 @@ const userModel = require("../models/user");
 const {userRegistrationValidation} = require("../configuration/userValidation");
 import {Response, Request, NextFunction} from "express"
 exports.userRegistration = async (req: Request,res: Response)=>{
-
     const {error} = userRegistrationValidation(req.body);
     if(error) return res.status(400).json({message : error.details[0].message});
 
